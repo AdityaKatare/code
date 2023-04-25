@@ -1,0 +1,285 @@
+class stack:
+    def __init__(self):
+        self.stk = []
+
+    def isempty(self):
+        return self.stk == []
+    
+    def push(self, data):
+        self.stk.append(data)
+
+    def pop(self):
+        if self.isempty():
+            return None
+        return self.stk.pop()
+    
+    def size(self):
+        return len(self.stk)
+    
+def reverse(st):
+    stk = stack()
+    for i in st:
+        stk.push(i)
+    ch = ''
+    for i in range(stk.size()):
+        ch += stk.pop()
+    return ch
+
+class queue:
+    def __init__(self):
+        self.q = []
+
+    def enqueue(self, data):
+        self.q.append(data)
+
+    def isempty(self):
+        return self.q == []
+    
+    def dequeue(self):
+        if self.isempty():
+            return None
+        return self.q.pop(0)
+    
+    def addfront(self, data):
+        self.q.insert(0, data)
+
+    def remrear(self):
+        self.q.pop()
+
+class llistNode:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class llist:
+    def __init__(self):
+        self.head = None
+
+    def addfront(self, data):
+        new = llistNode(data)
+        new.next = self.head
+        self.head = new
+
+    def addend(self, data):
+        if self.head is None:
+            self.head = llistNode(data)
+            return
+        itr = self.head
+        while itr.next:
+            itr = itr.next
+        itr.next = llistNode(data)
+    
+    def addin(self, data, idx):
+        if idx < 0 or idx > self.count():
+            raise Exception('Invalid index')
+        if idx == 0:
+            self.addfront(data)
+            return
+        ct = 0
+        itr = self.head
+        while itr:
+            if ct == idx -1:
+                new = llistNode(data)
+                new.next = itr.next
+                itr.next = new
+                break
+            itr = itr.next
+            ct += 1
+
+    def delete(self, data, idx):
+        if idx < 0 or idx > self.count():
+            raise Exception('Invalid index')
+        if idx == 0:
+            self.haed = self.head.next
+        ct = 0
+        itr = self.head
+        while itr:
+            if ct == idx-1:
+                itr.next = itr.next.next
+                break
+            itr = itr.next
+            ct += 1
+
+class bst:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+    def add(self, data):
+        if data == self.data:
+            return
+        if data < self.data:
+            if self.left:
+                self.left.add(data)
+            else:
+                self.left = bst(data)
+        else:
+            if self.right:
+                self.right.add(data)
+            else:
+                self.right = bst(data)
+    
+    def delete(self, data):
+        if data < self.data:
+            if self.left:
+                self.left = self.left.delete(data)
+        elif data > self.data:
+            if self.right:
+                self.right = self.right.delete(data)
+        else:
+            if self.left is None and self.right is None:
+                return None
+            elif self.left is None:
+                return self.right
+            elif self.right is None:
+                return self.left
+            min = self.right.min()
+            self.data = min
+            self.right = self.right.delete(data)
+
+    def min(self):
+        if self.left is None:
+            return self.data
+        return self.left.min()
+    
+    def max(self):
+        if self.right is None:
+            return self.data
+        return self.right.max()
+    
+    def sum(self):
+        if self.left:
+            lsum = self.left.sum()
+        else:
+            lsum = 0
+        if self.right:
+            rsum = self.right.sum()
+        else:
+            rsum = 0
+        return self.data + lsum + rsum
+    
+    def inorder(self):
+        elements = []
+        if self.left:
+            elements += self.left.inorder()
+        elements.append(self.data)
+        if self.right:
+            elements += self.right.inorder()
+        return elements
+    
+    def preorder(self):
+        elements = [self.data]
+        if self.left:
+            elements += self.left.preorder()
+        if self.right:
+            elements += self.right.preorder()
+        return elements
+
+    def postorder(self):
+        elements = []
+        if self.left:
+            elements += self.left.postorder()
+        if self.right:
+            elements += self.right.postorder()
+        elements.append(self.data)
+        return elements
+    
+def treebuild(arr):
+    root = bst(arr[0])
+    for i in range(len(arr)):
+        root.add(arr[i])
+    return root
+
+def linearsearch(arr, key):
+    for i in range(len(arr)):
+        if arr[i] == key:
+            return i
+    return -1
+
+def binarysearch(arr, key):
+    low = 0
+    high = len(arr)-1
+    while low <= high:
+        mid = (low+high)//2
+        if mid == key:
+            return mid
+        if mid < key:
+            low = mid +1
+        else:
+            high = mid -1
+    return -1
+
+def binarysearchrecursive(arr, key, low, high):
+    if low <= high:
+        mid = (low+high)//2
+        if arr[mid] == key:
+            return mid
+        if arr[mid] < key:
+            return binarysearchrecursive(arr, key, mid +1, high)
+        else:
+            return binarysearchrecursive(arr, key, low, mid -1)
+
+def bubblesort(arr):
+    for i in range(len(arr)):
+        for j in range(0, len(arr)-i-1):
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+
+def selection(arr):
+    for i in range(len(arr)):
+        min = i
+        for j in range(i+1, len(arr)):
+            if arr[min] > arr[j]:
+                min = j
+    arr[i], arr[min] = arr[min], arr[i]
+
+
+def quick(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr)//2]
+    left = [x for x in arr if x < pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if x > pivot]
+    return quick(left) + middle + quick(right)
+
+def merge_sort(arr):
+    if len(arr) <= 1:
+        return
+
+    mid = len(arr)//2
+
+    left = arr[:mid]
+    right = arr[mid:]
+
+    merge_sort(left)
+    merge_sort(right)
+
+    merge_two_sorted_lists(left, right, arr)
+
+def merge_two_sorted_lists(a,b,arr):
+    len_a = len(a)
+    len_b = len(b)
+
+    i = j = k = 0
+
+    while i < len_a and j < len_b:
+        if a[i] <= b[j]:
+            arr[k] = a[i]
+            i+=1
+        else:
+            arr[k] = b[j]
+            j+=1
+        k+=1
+
+    while i < len_a:
+        arr[k] = a[i]
+        i+=1
+        k+=1
+
+    while j < len_b:
+        arr[k] = b[j]
+        j+=1
+        k+=1
