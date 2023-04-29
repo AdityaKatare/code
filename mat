@@ -1,0 +1,129 @@
+%Basics of matrix operatoins
+sum(), max(), min(), prod(), size(), inv(), rank(), cross(), dot()
+
+%Looping 
+sum = 0
+for i=1:n
+  sum = sum + eq
+end and disp(sum)
+
+%Built in functions
+syms t w
+f= sin(2*t)+exp(-abs(3*t));
+F=fourier(f,t,w)
+
+%Periodic functions
+x = linspace(0,3,100)
+f = @(x)(eq).*(0 to x and x to 3)
+p = repmat(f(x), 1, int/space)
+q = linspace(interval, length(p))
+plot(q,p)
+
+%Plot vector field
+x = linspace(0,1,100), y and z also remember the limits
+[x y z] = meshgrid(x,y,z)
+u = i comp v->j w->k
+quiver3(x,y,z,u,v,w)
+
+%Lagrange Interpolation
+x = []
+y = []
+n = length(x)
+syms t
+sum = 0
+for i=1:n
+  lk = 1
+  for j=1:n
+    if i~=j
+      lk = lk*(t-x(j))/(x(i)-x(j))
+    end
+  end
+  sum = sum + lk*y(i)
+end
+t = at what x val
+disp(sum)
+or
+sum=simplify(sum);
+fprintf('Lagrange interpolating polynomial for the given data is\n')
+disp( vpa(sum,4))
+t=x(1):0.01:x(n);
+z=eval(vpa(sum,4));
+plot(x,y,'*', t,z, 'r')
+t=[10];
+eval(sum)
+end
+
+%NDDF
+function [poly]=NDDF5(x,y)
+n=length(x);
+D=zeros(n,n);
+D(:,1)=y;
+for j=2:n
+    for i=j:n
+        D(i,j)=(D(i,j-1)-D(i-1,j-1))/(x(i)-x(i-j+1));
+    end
+end
+syms t
+delta=diag(D);
+poly=delta(1);
+prod=1;
+for  i=2:n
+    prod=prod*(t-x(i-1));
+    poly=poly+prod*delta(i);
+end
+ 
+poly=simplify(poly);
+t = x(1):0.01:x(n);
+z = eval(poly);
+plot(x,y,'*',t,z,'k')
+legend('Data value','Polynomial')
+end
+
+%Trapezoidal Rule
+function[]= trapz(f, a, b, n)
+h=(b-a)/n;
+I=f(a)+f(b);
+for i=1:n-1
+    x=a+i*h;
+    I=I+2*f(x);
+end
+I=h/2*I;
+fprintf('The integration of given function a to b is\n')
+disp(I)
+end
+
+%1/3
+function[]= simps13sp(f,a,b,n)
+h=(b-a)/n;
+x=a:h:b;
+y=f(x);
+I=y(1)+y(n+1);
+for i=2:n
+    if mod(i,2)
+    I=I+2*y(i);
+    else
+        I=I+4*y(i);
+    end
+end
+I=(h/3)*I;
+fprintf('The integration of given function a to b is\n')
+disp(I)
+
+
+%3/8
+function[]= simps38(f, a, b, n)
+h=(b-a)/n;
+I=f(a)+f(b);
+for i=1:n-1
+    x=a+i*h;
+    if mod(i,3)==0
+    I=I+2*f(x);
+    else
+        I=I+3*f(x);
+    end
+end
+I=3*h*I/8;
+fprintf('The integration of given function a to b is\n')
+disp(I)
+
+
